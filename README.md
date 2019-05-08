@@ -4,6 +4,10 @@ G-P-M调度结构说明请参考[https://tiancaiamao.gitbooks.io/go-internals/co
 
 G-P-M调度说明可参考[https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.2.html](https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.2.html)
 
+[https://tonybai.com/2017/06/23/an-intro-about-goroutine-scheduler/](https://tonybai.com/2017/06/23/an-intro-about-goroutine-scheduler/)
+
+
+
 当前M中运行的G进入系统调用或者等待channel数据时会发生routine切换，下面以进入系统调用举例
 
 1. 进入系统调用（即调用entersyscall 或者entersyscallblock）
