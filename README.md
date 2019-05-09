@@ -8,7 +8,7 @@ G-P-M调度说明可参考[https://tiancaiamao.gitbooks.io/go-internals/content/
 
 * 当前M中运行的G进入系统调用或者等待channel数据时会发生routine切换，下面以进入系统调用举例
 
-1. 进入系统调用（即调用entersyscall 或者entersyscallblock）
+     1. 进入系统调用（即调用entersyscall 或者entersyscallblock）
 
 当前M中运行的G进入Gsyscall状态，让出CPU
 
