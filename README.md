@@ -1,5 +1,7 @@
 # go-routine调度
 
+##### 参考资料
+
 G-P-M调度结构说明请参考[https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.1.html](https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.2.html)
 
 G-P-M调度说明可参考[https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.2.html](https://tiancaiamao.gitbooks.io/go-internals/content/zh/05.2.html)
