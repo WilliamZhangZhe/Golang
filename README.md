@@ -8,7 +8,7 @@ G-P-M调度说明可参考[https://tiancaiamao.gitbooks.io/go-internals/content/
 
 [https://tonybai.com/2017/06/23/an-intro-about-goroutine-scheduler/](https://tonybai.com/2017/06/23/an-intro-about-goroutine-scheduler/)
 
-##### Goroutine调度
+* ##### Goroutine调度
 
 当前M中运行的G进入系统调用或者等待channel数据时会发生routine切换，下面以进入系统调用举例
 
@@ -29,5 +29,33 @@ G-P-M调度说明可参考[https://tiancaiamao.gitbooks.io/go-internals/content/
 5. 收回因syscall长时间阻塞的P
 ```
 
+抢占调度实际上是由retake实现的
 
+```
+// forcePreemptNS is the time slice given to a G before it is
+// preempted.
+const forcePreemptNS = 10 * 1000 * 1000 // 10ms
+
+func retake(now int64) uint32 {
+          ... ...
+           // Preempt G if it's running for too long.
+            t := int64(_p_.schedtick)
+            if int64(pd.schedtick) != t {
+                pd.schedtick = uint32(t)
+                pd.schedwhen = now
+                continue
+            }
+            if pd.schedwhen+forcePreemptNS > now {
+                continue
+            }
+            preemptone(_p_)
+         ... ...
+}
+```
+
+由代码可以看出实际的G能独占M的时间为10ms，之将被强占，以防其它G饿死
+
+##### channel阻塞或network I/O情况下的调度
+
+如果G被阻塞在某个channel操作或network I/O操作上时，G会被放置到某个wait队列中，而M会尝试运行下一个runnable的G；如果此时没有runnable的G供m运行，那么m将解绑P，并进入sleep状态。当I/O available或channel操作完成，在wait队列中的G会被唤醒，标记为runnable，放入到某P的队列中，绑定一个M继续执行。
 
